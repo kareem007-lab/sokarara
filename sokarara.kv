@@ -1,0 +1,272 @@
+#:kivy 2.0.0
+#:import Factory kivy.factory.Factory
+
+<ImageViewer>:
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ParameterPanel>:
+    default_tab: basic_tab
+    
+    TabbedPanelItem:
+        id: basic_tab
+        text: 'أساسي'
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 5
+            
+            Label:
+                text: 'DP: {:.1f}'.format(dp_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: dp_slider
+                min: 1.0
+                max: 3.0
+                step: 0.1
+                value: root.dp
+                on_value: root.dp = self.value
+            
+            Label:
+                text: 'الحد الأدنى للمسافة: {}'.format(min_dist_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: min_dist_slider
+                min: 5
+                max: 100
+                step: 1
+                value: root.min_dist
+                on_value: root.min_dist = self.value
+            
+            Label:
+                text: 'الحد الأدنى للنصف قطر: {}'.format(min_radius_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: min_radius_slider
+                min: 1
+                max: 50
+                step: 1
+                value: root.min_radius
+                on_value: root.min_radius = self.value
+            
+            Label:
+                text: 'الحد الأقصى للنصف قطر: {}'.format(max_radius_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: max_radius_slider
+                min: 5
+                max: 100
+                step: 1
+                value: root.max_radius
+                on_value: root.max_radius = self.value
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: dark_holes_cb
+                    active: root.detect_dark_holes
+                    on_active: root.detect_dark_holes = self.active
+                Label:
+                    text: 'اكتشاف الثقوب الداكنة'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: auto_zoom_cb
+                    active: root.auto_zoom
+                    on_active: root.auto_zoom = self.active
+                Label:
+                    text: 'ملائمة الصورة تلقائياً'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                Label:
+                    text: 'نسبة البكسل إلى السنتيمتر:'
+                    size_hint_x: 0.7
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+                TextInput:
+                    id: ratio_input
+                    text: str(root.pixel_to_cm_ratio)
+                    size_hint_x: 0.3
+                    multiline: False
+                    on_text_validate: root.pixel_to_cm_ratio = float(self.text)
+            
+            Widget:
+                size_hint_y: 1
+            
+            Button:
+                text: 'تطبيق المعلمات'
+                size_hint_y: None
+                height: '50dp'
+                on_press: root.apply_parameters()
+    
+    TabbedPanelItem:
+        text: 'متقدم'
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 5
+            
+            Label:
+                text: 'Param1: {}'.format(param1_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: param1_slider
+                min: 10
+                max: 300
+                step: 1
+                value: root.param1
+                on_value: root.param1 = self.value
+            
+            Label:
+                text: 'Param2: {}'.format(param2_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: param2_slider
+                min: 5
+                max: 100
+                step: 1
+                value: root.param2
+                on_value: root.param2 = self.value
+            
+            Label:
+                text: 'حجم التمويه: {}'.format(blur_size_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: blur_size_slider
+                min: 3
+                max: 15
+                step: 2
+                value: root.blur_size
+                on_value: root.blur_size = self.value
+            
+            Label:
+                text: 'قيمة العتبة: {}'.format(threshold_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: threshold_slider
+                min: 50
+                max: 250
+                step: 1
+                value: root.threshold_value
+                on_value: root.threshold_value = self.value
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: adaptive_threshold_cb
+                    active: root.use_adaptive_threshold
+                    on_active: root.use_adaptive_threshold = self.active
+                Label:
+                    text: 'استخدام العتبة التكيفية'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: debug_mode_cb
+                    active: root.debug_mode
+                    on_active: root.debug_mode = self.active
+                Label:
+                    text: 'وضع التصحيح'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: multi_thresholds_cb
+                    active: root.use_multiple_thresholds
+                    on_active: root.use_multiple_thresholds = self.active
+                Label:
+                    text: 'استخدام عتبات متعددة'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: contrast_enhancement_cb
+                    active: root.use_contrast_enhancement
+                    on_active: root.use_contrast_enhancement = self.active
+                Label:
+                    text: 'تحسين التباين'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            Label:
+                text: 'خيارات الثقوب المرقمة'
+                size_hint_y: None
+                height: '30dp'
+                canvas.before:
+                    Color:
+                        rgba: 0.5, 0.5, 0.5, 0.2
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            
+            BoxLayout:
+                size_hint_y: None
+                height: '40dp'
+                CheckBox:
+                    id: numbered_holes_cb
+                    active: root.detect_only_numbered_holes
+                    on_active: root.detect_only_numbered_holes = self.active
+                Label:
+                    text: 'اكتشاف الثقوب المرقمة فقط'
+                    text_size: self.size
+                    halign: 'right'
+                    valign: 'middle'
+            
+            Label:
+                text: 'حد القرب من الرقم: {}'.format(proximity_slider.value)
+                size_hint_y: None
+                height: '30dp'
+            Slider:
+                id: proximity_slider
+                min: 20
+                max: 200
+                step: 5
+                value: root.number_proximity_threshold
+                on_value: root.number_proximity_threshold = self.value
+            
+            Widget:
+                size_hint_y: 1
+            
+            Button:
+                text: 'تطبيق المعلمات'
+                size_hint_y: None
+                height: '50dp'
+                on_press: root.apply_parameters()
